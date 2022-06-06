@@ -59,6 +59,11 @@ for (let path in content) {
   });
 }
 
+// METHODE 1
+// FYI https://www.jstree.com/docs/json/ doesn't need a hierarchial JSON
+// it needs jQuery though.
+
+//METHODE 2
 // build the hierarchial JSON
 // from https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/
 let root;
@@ -88,9 +93,9 @@ const structure = root.children
 treeDoc.json(structure);
 // treeDoc.on('open', e => console.log('open', e));
 // treeDoc.on('select', e => console.log('select', window.location.assign(e.getAttribute('href'))));
-treeDoc.on('select', e => {
+// treeDoc.on('select', e => {
   if (e.getAttribute('href')) window.location.assign(e.getAttribute('href'))
-});
+// });
 // treeDoc.on('action', e => console.log('action', e));
 
 }
