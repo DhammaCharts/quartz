@@ -38,6 +38,12 @@
   resources.Minify }}
   <script src="{{$popover.Permalink}}"></script>
 
+  {{ $tree := resources.Get "js/tree.js" | resources.Fingerprint "md5" }}
+  <script src="{{ $tree.Permalink }}"></script>
+
+  {{ $drawTree := resources.Get "js/drawTree.js" | resources.Fingerprint "md5" }}
+  <script src="{{ $drawTree.Permalink }}"></script>
+
   <!--  Preload page vars  -->
   {{$linkIndex := resources.Get "indices/linkIndex.json" | resources.Fingerprint
   "md5" | resources.Minify | }} {{$contentIndex := resources.Get
@@ -92,6 +98,8 @@
         );
       }
 
+      drawTree(pathBase);
+
       {{end}}
       {{if $.Site.Data.config.enableLinkPreview}}
       initPopover(
@@ -108,6 +116,9 @@
         ],
         throwOnError : false
       });
+
+
+
       {{end}}
     };
   </script>
@@ -125,6 +136,7 @@
       prefetch: () => {},
     }
     draw()
+    
   </script>
   {{end}}
 </head>

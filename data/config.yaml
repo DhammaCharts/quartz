@@ -3,7 +3,7 @@ enableToc: true
 openToc: false
 enableLinkPreview: true
 enableLatex: true
-enableSPA: true
+enableSPA: false
 enableFooter: true
 enableContextualBacklinks: true
 enableRecentNotes: false

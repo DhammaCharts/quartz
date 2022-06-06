@@ -93,7 +93,8 @@ async function drawGraph(baseUrl,isHome,pathColors,graphConfig) {
       .on("end", enableDrag ? dragended : noop)
   }
 
-  const height = Math.max(container.offsetHeight, isHome ? 500 : 250)
+  // const height = Math.max(container.offsetHeight, isHome ? 500 : 250)
+  const height = Math.max(container.offsetHeight, 250)
   const width = container.offsetWidth
 
   const simulation = d3
