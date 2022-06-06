@@ -93,9 +93,9 @@ const structure = root.children
 treeDoc.json(structure);
 // treeDoc.on('open', e => console.log('open', e));
 // treeDoc.on('select', e => console.log('select', window.location.assign(e.getAttribute('href'))));
-// treeDoc.on('select', e => {
+treeDoc.on('select', e => {
   if (e.getAttribute('href')) window.location.assign(e.getAttribute('href'))
-// });
+});
 // treeDoc.on('action', e => console.log('action', e));
 
 }
