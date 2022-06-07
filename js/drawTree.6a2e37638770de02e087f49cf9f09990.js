@@ -97,16 +97,16 @@ treeDoc.on('select', e => {
 });
 
 // open tree at current node
-const crumb = pathWindow.split("/");
-const crumbNoBase = crumb.splice(2,crumb.length-3)
+// const crumb = pathWindow.split("/");
+// const crumbNoBase = crumb.splice(2,crumb.length-3)
 
-treeDoc.browse(a => {
-  if (crumbNoBase.includes(a.innerHTML)) {
-    // if (a.node.name.startsWith('folder 1') || a.node.name === 'file 1/1/1/1/2') {
-    return true;
-  }
-  return false;
-});
+// treeDoc.browse(a => {
+//   if (crumbNoBase.includes(a.innerHTML)) {
+//     // if (a.node.name.startsWith('folder 1') || a.node.name === 'file 1/1/1/1/2') {
+//     return true;
+//   }
+//   return false;
+// });
 
 // other calls :
 // treeDoc.on('action', e => console.log('action', e));
