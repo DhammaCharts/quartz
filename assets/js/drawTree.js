@@ -1,4 +1,4 @@
-async function drawTree(pathBase){
+async function drawTree(pathBase, pathWindow){
 
 const { content } = await fetchData;
 
@@ -87,15 +87,30 @@ tree.forEach((el) => {
 
 // display tree structure
 // from https://www.cssscript.com/folder-tree-json/
-// console.log(root);
-const structure = root.children
 
+const structure = root.children
 treeDoc.json(structure);
-// treeDoc.on('open', e => console.log('open', e));
-// treeDoc.on('select', e => console.log('select', window.location.assign(e.getAttribute('href'))));
+
+// click on node go to page
 treeDoc.on('select', e => {
   if (e.getAttribute('href')) window.location.assign(e.getAttribute('href'))
 });
+
+// open tree at current node
+const crumb = pathWindow.split("/");
+const crumbNoBase = crumb.splice(2,crumb.length-3)
+
+treeDoc.browse(a => {
+  if (crumbNoBase.includes(a.innerHTML)) {
+    // if (a.node.name.startsWith('folder 1') || a.node.name === 'file 1/1/1/1/2') {
+    return true;
+  }
+  return false;
+});
+
+// other calls :
 // treeDoc.on('action', e => console.log('action', e));
+// treeDoc.on('open', e => console.log('open', e));
+// treeDoc.on('select', e => console.log('select', window.location.assign(e.getAttribute('href'))));
 
 }
