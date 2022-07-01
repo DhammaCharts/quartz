@@ -1,16 +1,23 @@
-async function drawTree(pathBase){
+async function drawTree(pathBase, pathWindow){
 
 const { content } = await fetchData;
 
-// COMMENT : add a uid for pages and folders id ? will avoid problems if duplicates
+// COMMENT : add a uid for pages and folders id ? will avoid problems if duplicates in page name and folder name
 
-// this is for the tree display on page
-var treeDoc = new Tree(document.getElementById('tree'), {
+'use strict';
+class CustomTree extends Tree {
+  // avoid auto scroll to selected element
+  focus() {
+    console.log('skipped');
+  }
+}
+
+var treeJS = new CustomTree(document.getElementById('tree'), {
+  dark: false,
   navigate: true // allow navigate with ArrowUp and ArrowDown
 });
 
 // we want to build an array of objects, one for each page and folder (type)
-// dataJSON is `contentIndex.json`
 const tree = [];
 
 for (let path in content) {
@@ -59,6 +66,11 @@ for (let path in content) {
   });
 }
 
+// METHODE 1
+// FYI https://www.jstree.com/docs/json/ doesn't need a hierarchial JSON
+// it needs jQuery though. Not used for the moment
+
+//METHODE 2
 // build the hierarchial JSON
 // from https://typeofnan.dev/an-easy-way-to-build-a-tree-with-object-references/
 let root;
@@ -82,15 +94,65 @@ tree.forEach((el) => {
 
 // display tree structure
 // from https://www.cssscript.com/folder-tree-json/
-// console.log(root);
-const structure = root.children
 
-treeDoc.json(structure);
-// treeDoc.on('open', e => console.log('open', e));
-// treeDoc.on('select', e => console.log('select', window.location.assign(e.getAttribute('href'))));
-treeDoc.on('select', e => {
-  if (e.getAttribute('href')) window.location.assign(e.getAttribute('href'))
+// keep track of the original node objects
+const structure = root.children;
+
+treeJS.on('created', (e, node) => {
+  e.node = node;
 });
-// treeDoc.on('action', e => console.log('action', e));
+// console.log(structure);
+treeJS.json(structure);
+
+// open tree at current node
+const crumb = pathWindow.split("/");
+const crumbNoBase = crumb.splice(2,crumb.length-3)
+
+for (let i = 0 ; i < crumbNoBase.length - 1 ; i ++)
+{
+  crumbNoBase[i] = '_'+crumbNoBase[i]+'_'
+}
+
+let treeIsOpen = false;
+treeJS.on('select', e => {
+  // allow simple click to open folder, Bug on Safari for node click !
+  if (e.tagName === 'SUMMARY') treeJS.open(e.parentElement);
+
+  // click on node to go to page
+  if (  treeIsOpen
+    &&  e.node.type      == 'page'
+    &&  e.node.href+'/' !=  pathWindow)
+    window.location.href =  e.node.href;
+
+});
+// let i = 0
+
+function openTree(){
+      var p = new Promise(function(success) {
+        // open the tree at the current page
+        treeJS.browse(a => {
+          // console.log(i);
+          // i++
+          // console.log(crumbNoBase);
+          // console.log(a.node.id);
+          if(crumbNoBase.indexOf(a.node.id) !== -1) {
+              return true;
+          }
+          return false;
+        });
+        success();
+      });
+    return p;
+}
+
+function setOpenTree(){
+    let p = openTree();
+    p.then(function(s) {
+      treeIsOpen = true;
+      console.log("tree is open");
+    });
+}
+
+setOpenTree()
 
 }

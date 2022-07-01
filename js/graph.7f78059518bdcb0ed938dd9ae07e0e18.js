@@ -1,4 +1,4 @@
-async function drawGraph(baseUrl, isHome, pathColors, graphConfig) {
+async function drawGraph(baseUrl, isHome, pathColors, graphConfig, popup = false) {
 
   let {
   depth,
@@ -10,7 +10,10 @@ async function drawGraph(baseUrl, isHome, pathColors, graphConfig) {
   repelForce,
   fontSize} = graphConfig;
 
-  const container = document.getElementById("graph-container")
+  const elementId = popup ? "graph-container-popup" : "graph-container" ;
+
+
+  const container =  document.getElementById(elementId);
   const { index, links, content } = await fetchData
 
   // Use .pathname to remove hashes / searchParams / text fragments
@@ -93,8 +96,7 @@ async function drawGraph(baseUrl, isHome, pathColors, graphConfig) {
       .on("end", enableDrag ? dragended : noop)
   }
 
-  // const height = Math.max(container.offsetHeight, isHome ? 500 : 250)
-  const height = Math.max(container.offsetHeight, 250)
+  const height = Math.max(container.offsetHeight, isHome ? 500 : 250)
   const width = container.offsetWidth
 
   const simulation = d3
@@ -110,7 +112,7 @@ async function drawGraph(baseUrl, isHome, pathColors, graphConfig) {
     .force("center", d3.forceCenter())
 
   const svg = d3
-    .select("#graph-container")
+    .select('#'+elementId)
     .append("svg")
     .attr("width", width)
     .attr("height", height)
